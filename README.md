@@ -1,90 +1,38 @@
-# Title: CO2 Emissions Analysis - Zimbabwe
-# Date: November 2026
+# Zimbabwe CO₂ Emissions Analysis
 
-# 1. Install and load required packages
-if (!require("tidyverse")) install.packages("tidyverse")
-library(tidyverse)
+## 📌 Project Overview
+This repository documents an exploratory data analysis of **Zimbabwe's historical and recent carbon dioxide (CO₂) emissions** using **R** and the `tidyverse` (`ggplot2`) package. Data is sourced directly from the [Our World in Data (OWID) CO₂ and Greenhouse Gas Emissions dataset](https://github.com/owid/co2-data).
 
-# Create a directory to store output figures
-if (!dir.exists("figures")) dir.create("figures")
+---
 
-# 2. Load the Our World in Data (OWID) CO2 dataset directly
-url <- "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
-co2_data <- read.csv(url)
+## 📊 Key Findings & Visualizations
 
-# 3. Filter data for Zimbabwe (from 1950 to most recent available year)
-zimbabwe_co2 <- co2_data %>%
-  filter(country == "Zimbabwe", year >= 1950) %>%
-  select(
-    year, 
-    co2,                # Annual total CO2 emissions (million tonnes)
-    co2_per_capita,     # CO2 emissions per person (tonnes)
-    coal_co2,           # Emissions from coal
-    oil_co2,            # Emissions from oil
-    cement_co2          # Emissions from cement
-  )
+### 1. Historical Annual CO₂ Emissions (1970–2025)
+- Zimbabwe's territorial CO₂ emissions peaked in the early 1990s (~19.1 million tonnes in 1992), declined through the 2000s economic contraction (reaching ~8.3 Mt in 2008), and have steadily rebounded to ~16–17.3 Mt in recent years.
+- Globally, Zimbabwe contributes roughly **0.03%–0.04%** of annual global CO₂ emissions.
 
-# Inspect the dataset and summary statistics
-head(zimbabwe_co2)
-tail(zimbabwe_co2)
-summary(zimbabwe_co2)
+![Zimbabwe Annual CO2 Emissions](fig1_zimbabwe_co2_trend.png)
 
-# ==============================================================================
-# 4. Generate & Save Line Plots
-# ==============================================================================
+### 2. Per Capita CO₂ Emissions
+- While total emissions have rebounded, population growth means per capita emissions (~0.7–1.02 tonnes per person) remain lower than their 1970s and early-1990s highs (~1.75 tonnes per person).
 
-# --- FIGURE 1: Annual Total CO2 Emissions Over Time ---
-plot1 <- ggplot(zimbabwe_co2, aes(x = year, y = co2)) +
-  geom_line(color = "#1b7837", linewidth = 1.2) +
-  geom_point(color = "#1b7837", size = 1.5, alpha = 0.7) +
-  labs(
-    title = "Annual Total CO2 Emissions in Zimbabwe (1950–Present)",
-    subtitle = "Territorial emissions from fossil fuels and industry",
-    x = "Year",
-    y = "Annual CO2 Emissions (Million Tonnes)",
-    caption = "Source: Our World in Data / Global Carbon Budget"
-  ) +
-  theme_minimal(base_size = 13) +
-  theme(plot.title = element_text(face = "bold"))
+![Zimbabwe Per Capita CO2 Emissions](fig2_zimbabwe_per_capita.png)
 
-ggsave("figures/01_zimbabwe_total_co2.png", plot = plot1, width = 8, height = 5, dpi = 300)
+### 3. Emissions by Fuel & Industry Source
+- **Coal** is the dominant driver of Zimbabwe's fossil fuel emissions (tied to thermal power generation like Hwange Power Station), followed by **Oil** (transport and liquid fuels) and **Cement** manufacturing.
 
-# --- FIGURE 2: Per Capita CO2 Emissions Over Time ---
-plot2 <- ggplot(zimbabwe_co2, aes(x = year, y = co2_per_capita)) +
-  geom_area(fill = "#a6dba0", alpha = 0.5) +
-  geom_line(color = "#005a32", linewidth = 1.1) +
-  labs(
-    title = "Per Capita CO2 Emissions in Zimbabwe (1950–Present)",
-    subtitle = "Average annual carbon dioxide emissions per person",
-    x = "Year",
-    y = "CO2 Emissions per Capita (Tonnes)",
-    caption = "Source: Our World in Data / Global Carbon Budget"
-  ) +
-  theme_minimal(base_size = 13) +
-  theme(plot.title = element_text(face = "bold"))
+![Zimbabwe CO2 Emissions by Source](fig3_zimbabwe_by_source.png)
 
-ggsave("figures/02_zimbabwe_per_capita_co2.png", plot = plot2, width = 8, height = 5, dpi = 300)
+---
 
-# --- FIGURE 3: CO2 Emissions by Fuel/Industry Source ---
-zimbabwe_sources <- zimbabwe_co2 %>%
-  select(year, Coal = coal_co2, Oil = oil_co2, Cement = cement_co2) %>%
-  pivot_longer(cols = c(Coal, Oil, Cement), names_to = "Source", values_to = "Emissions") %>%
-  filter(!is.na(Emissions))
+## 🛠️ Methodology & Steps
+1. **Data Acquisition:** Loaded the live CSV dataset directly from OWID's GitHub repository via `read_csv()`.
+2. **Data Wrangling:** Filtered observations for `country == "Zimbabwe"` from `1970` onward and selected total emissions, per capita metrics, and fuel-specific variables (`coal_co2`, `oil_co2`, `cement_co2`).
+3. **Visualization:** Built three custom charts using `ggplot2` and exported them at 300 DPI via `ggsave()`.
 
-plot3 <- ggplot(zimbabwe_sources, aes(x = year, y = Emissions, color = Source)) +
-  geom_line(linewidth = 1.1) +
-  scale_color_manual(values = c("Coal" = "#252525", "Oil" = "#d95f02", "Cement" = "#7570b3")) +
-  labs(
-    title = "Zimbabwe CO2 Emissions by Fuel & Industry Type",
-    subtitle = "Breakdown of annual emissions across Coal, Oil, and Cement",
-    x = "Year",
-    y = "CO2 Emissions (Million Tonnes)",
-    color = "Source",
-    caption = "Source: Our World in Data / Global Carbon Budget"
-  ) +
-  theme_minimal(base_size = 13) +
-  theme(plot.title = element_text(face = "bold"), legend.position = "top")
-
-ggsave("figures/03_zimbabwe_co2_by_source.png", plot = plot3, width = 8, height = 5, dpi = 300)
-
-print("All figures generated successfully in the 'figures/' folder!")
+## 📂 Repository Structure
+- `README.md` — Project documentation, methodology, and embedded visual outputs.
+- `zimbabwe_co2_analysis.R` — Complete, reproducible R script.
+- `fig1_zimbabwe_co2_trend.png` — Line/area plot of annual CO₂ emissions.
+- `fig2_zimbabwe_per_capita.png` — Bar chart of per capita emissions over time.
+- `fig3_zimbabwe_by_source.png` — Bar chart comparing emissions by fuel source.
