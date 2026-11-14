@@ -1,8 +1,5 @@
-# ==============================================================================
 # Title: CO2 Emissions Analysis - Zimbabwe
-# Author: [Adrienne Kishna P. Calimbo]
 # Date: November 2026
-# ==============================================================================
 
 # 1. Install and load required packages
 if (!require("tidyverse")) install.packages("tidyverse")
