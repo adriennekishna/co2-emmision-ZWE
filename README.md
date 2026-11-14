@@ -1,38 +1,48 @@
 # Zimbabwe CO₂ Emissions Analysis
 
-## 📌 Project Overview
-This repository documents an exploratory data analysis of **Zimbabwe's historical and recent carbon dioxide (CO₂) emissions** using **R** and the `tidyverse` (`ggplot2`) package. Data is sourced directly from the [Our World in Data (OWID) CO₂ and Greenhouse Gas Emissions dataset](https://github.com/owid/co2-data).
+## Project Overview
+This project explores historical and recent carbon dioxide (CO₂) emissions in **Zimbabwe** using R. It uses the Our World in Data (OWID) CO₂ and Greenhouse Gas Emissions dataset and the `tidyverse` / `ggplot2` packages.
 
----
+## Research Focus
+The analysis examines:
+1. Zimbabwe's annual territorial CO₂ emissions from 1970 onward.
+2. CO₂ emissions per person over time.
+3. Emissions from selected sources: coal, oil, and cement.
 
-## 📊 Key Findings & Visualizations
+## Data Source
+- [Our World in Data — CO₂ and Greenhouse Gas Emissions dataset](https://github.com/owid/co2-data)
 
-### 1. Historical Annual CO₂ Emissions (1970–2025)
-- Zimbabwe's territorial CO₂ emissions peaked in the early 1990s (~19.1 million tonnes in 1992), declined through the 2000s economic contraction (reaching ~8.3 Mt in 2008), and have steadily rebounded to ~16–17.3 Mt in recent years.
-- Globally, Zimbabwe contributes roughly **0.03%–0.04%** of annual global CO₂ emissions.
+The R script downloads the dataset when it runs. Results depend on the latest data available from OWID at that time.
 
-![Zimbabwe Annual CO2 Emissions](fig1_zimbabwe_co2_trend.png)
+## Methodology
+1. Download the OWID dataset from its public GitHub repository.
+2. Filter the data to observations for Zimbabwe from 1970 onward.
+3. Select total CO₂ emissions, per-capita emissions, and the coal, oil, and cement emissions variables.
+4. Create three time-series visualizations with `ggplot2`.
+5. Save the figures as PNG files at 300 DPI in the `figures/` folder.
 
-### 2. Per Capita CO₂ Emissions
-- While total emissions have rebounded, population growth means per capita emissions (~0.7–1.02 tonnes per person) remain lower than their 1970s and early-1990s highs (~1.75 tonnes per person).
+## How to Run
+Install R, then install the required packages if they are not already available:
 
-![Zimbabwe Per Capita CO2 Emissions](fig2_zimbabwe_per_capita.png)
+```r
+install.packages(c("tidyverse", "scales"))
+```
 
-### 3. Emissions by Fuel & Industry Source
-- **Coal** is the dominant driver of Zimbabwe's fossil fuel emissions (tied to thermal power generation like Hwange Power Station), followed by **Oil** (transport and liquid fuels) and **Cement** manufacturing.
+Run the script from the repository's root directory:
 
-![Zimbabwe CO2 Emissions by Source](fig3_zimbabwe_by_source.png)
+```r
+source("zimbabwe_co2_analysis.R")
+```
 
----
+The script creates the `figures/` directory (if needed) and saves:
+- `figures/fig1_zimbabwe_co2_trend.png`
+- `figures/fig2_zimbabwe_per_capita.png`
+- `figures/fig3_zimbabwe_by_source.png`
 
-## 🛠️ Methodology & Steps
-1. **Data Acquisition:** Loaded the live CSV dataset directly from OWID's GitHub repository via `read_csv()`.
-2. **Data Wrangling:** Filtered observations for `country == "Zimbabwe"` from `1970` onward and selected total emissions, per capita metrics, and fuel-specific variables (`coal_co2`, `oil_co2`, `cement_co2`).
-3. **Visualization:** Built three custom charts using `ggplot2` and exported them at 300 DPI via `ggsave()`.
+## Repository Structure
+- `README.md` — Project overview, data source, and instructions.
+- `zimbabwe_co2_analysis.R` — Reproducible R analysis script.
+- `figures/` — Output folder created by the script for the three visualizations.
 
-## 📂 Repository Structure
-- `README.md` — Project documentation, methodology, and embedded visual outputs.
-- `zimbabwe_co2_analysis.R` — Complete, reproducible R script.
-- `fig1_zimbabwe_co2_trend.png` — Line/area plot of annual CO₂ emissions.
-- `fig2_zimbabwe_per_capita.png` — Bar chart of per capita emissions over time.
-- `fig3_zimbabwe_by_source.png` — Bar chart comparing emissions by fuel source.
+## Notes
+This repository currently contains the analysis script and project documentation. The figures are generated when the script is run in an R environment with an internet connection. Numerical findings and interpretations should be added after reviewing the generated charts and the corresponding data.
